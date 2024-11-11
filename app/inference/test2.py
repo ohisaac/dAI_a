@@ -48,6 +48,7 @@ async def main():
         logging.info(timestamp2)
         logging.info('finished')
     finally:
+        logging.info('Aborting request')
         await engine.abort(request_id='test')
         # await engine.shutdown()
 
