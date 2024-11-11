@@ -39,11 +39,24 @@ async def real_load_model():
     
         # return model_instance
 
+    async def run_test():
+        import time
+        print('into test!' + str(int(time.time())))
+        await asyncio.sleep(20)
+        # time.sleep(20)
+        print('out of test!' + str(int(time.time())))
+        # return {"message": "Hello test"}
+
 
     logging.info("-Child- loading model")
-    asyncio.run(load_model())
+    # asyncio.run(load_model())
+    # asyncio.run(run_test())
+    # loop = asyncio.get_event_loop()
+    # loop.run_until_complete(run_test())
+    # await run_test()
+    await load_model()
     logging.info("-Child- running api")
-    uvicorn.run(app, host="0.0.0.0", port=6910)
+    # await uvicorn.run(app, host="0.0.0.0", port=6910)
 
 
 async def real_generate_text():

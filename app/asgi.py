@@ -33,6 +33,18 @@ async def home():
 
 
 
+async def test():
+    import time
+    print('into test!' + str(int(time.time())))
+    await time.sleep(20)
+    print('out of test!' + str(int(time.time())))
+    return {"message": "Hello test"}
+
 
 app.add_api_route('/',home)
 app.include_router(router=endpoints.router, prefix="/api/v1")
+
+
+app.add_api_route('/test',test)
+
+
