@@ -16,8 +16,8 @@ data2 = {
 }
 
 # Making a POST request
-response = requests.post('https://fzdlfltvyzatf8-8888.proxy.runpod.net//api/v1/load_model', json=data)
-# response = requests.post('http://0.0.0.0:8888/api/v1/load_model', json=data)
+# response = requests.post('https://fzdlfltvyzatf8-8888.proxy.runpod.net//api/v1/load_model', json=data)
+response = requests.post('http://0.0.0.0:8888/api/v1/load_model', json=data)
 # response = requests.post('https://fzdlfltvyzatf8-8888.proxy.runpod.net//chat/completions', json=data2)
 
 # Check if the request was successful

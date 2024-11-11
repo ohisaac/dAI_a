@@ -61,9 +61,9 @@ async def real_load_model():
     # loop = asyncio.get_event_loop()
     # loop.run_until_complete(run_test())
     # await run_test()
-    await load_model()
+    # await load_model()
     logging.info("-Child- running api")
-    # await uvicorn.run(app, host="0.0.0.0", port=6910)
+    await uvicorn.run(app, host="0.0.0.0", port=6910)
 
 
 async def real_generate_text():
