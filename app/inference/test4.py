@@ -4,7 +4,11 @@ import time
 logging = loguru.logger
 engine_args = vllm.AsyncEngineArgs(
     model='Qwen/Qwen2-VL-2B-Instruct',
-    rope_scaling={"factor": 1.0},
+    rope_scaling={
+        "factor": 1.0,
+        'type': 'linear',
+        'rope_type': 'none',
+    },
 )
 logging.info('Loading model')
 # timestamp0 = vllm.utils.get_timestamp()
