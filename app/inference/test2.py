@@ -1,11 +1,20 @@
+import vllm
 from vllm import AsyncLLMEngine, SamplingParams
 import asyncio
 import time
-import logging
+# import logging
+import loguru
+
+
+logging = loguru.logger
 
 # Initialize the engine
 async def init_engine():
-    engine = AsyncLLMEngine.from_pretrained("Qwen/Qwen2-VL-2B-Instruct")
+    engine_args = vllm.AsyncEngineArgs(
+        model='Qwen/Qwen2-VL-2B-Instruct',
+    )
+    # engine = AsyncLLMEngine.from_pretrained("Qwen/Qwen2-VL-2B-Instruct")
+    engine = vllm.AsyncLLMEngine.from_engine_args(engine_args,start_engine_loop=False)
     return engine
 
 async def process_results(engine):
