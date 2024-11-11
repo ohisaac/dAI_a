@@ -27,13 +27,21 @@ async def process_results(engine):
             top_p=0.95
         )
         
-        results = await engine.generate(
+        # results = await engine.generate(
+        #     "who are u ?", 
+        #     sampling_params,
+        #     request_id='test',
+        # )
+        
+        # for result in results:
+        #     print("Generated output:", result.outputs[0].text)
+        #     print("Request ID:", result.request_id)
+
+        async for result in engine.generate(
             "who are u ?", 
             sampling_params,
             request_id='test',
-        )
-        
-        for result in results:
+        ):
             print("Generated output:", result.outputs[0].text)
             print("Request ID:", result.request_id)
             
