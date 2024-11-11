@@ -13,15 +13,15 @@ logging = loguru.logger
 
 async def real_load_model():
 
-    model_instance = None
+    # model_instance = None
 
     app = fastapi.FastAPI()
 
 
     @app.post("/generate")
     async def generate_text():
-        if model_instance is None:
-            return {"message": "Model not loaded"}
+        # if model_instance is None:
+        #     return {"message": "Model not loaded"}
         return {"message": "Hello World"}
     
     async def load_model():
@@ -32,12 +32,24 @@ async def real_load_model():
         logging.info('Loading model')
         logging.info(int(time.time()))
     
-        model_instance = vllm.AsyncLLMEngine.from_engine_args(engine_args)
+        model_instance = vllm.AsyncLLMEngine.from_engine_args(
+            engine_args,
+            engine_config=vllm.EngineConfig(
+                max_batch_size=1,
+                max_latency=1000,
+                max_tokens=100,
+                max_requests=1,
+                max_sequence_length=100,
+                max_timeout=1000,
+                max_tokens_per_request=100,
+                max_requests_per_request=1,
+            )
+        )
     
         logging.info('Model loaded')
         logging.info(int(time.time()))
     
-        # return model_instance
+        return model_instance
 
     async def run_test():
         import time
