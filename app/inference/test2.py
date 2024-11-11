@@ -15,6 +15,7 @@ async def init_engine():
     )
     # engine = AsyncLLMEngine.from_pretrained("Qwen/Qwen2-VL-2B-Instruct")
     engine = vllm.AsyncLLMEngine.from_engine_args(engine_args,start_engine_loop=False)
+
     return engine
 
 async def process_results(engine):
@@ -26,7 +27,11 @@ async def process_results(engine):
             top_p=0.95
         )
         
-        results = await engine.generate("who are u ?", sampling_params)
+        results = await engine.generate(
+            "who are u ?", 
+            sampling_params,
+            request_id='test',
+        )
         
         for result in results:
             print("Generated output:", result.outputs[0].text)
@@ -43,7 +48,8 @@ async def main():
         logging.info(timestamp2)
         logging.info('finished')
     finally:
-        await engine.shutdown()
+        await engine.abort()
+        # await engine.shutdown()
 
 if __name__ == "__main__":
     asyncio.run(main())
