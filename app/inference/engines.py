@@ -1,70 +1,96 @@
 import vllm
 import loguru
-
 import time
-
+import fastapi
+import uvicorn
+import asyncio
+import requests
 
 logging = loguru.logger
 
 
-engine_args = vllm.AsyncEngineArgs(
-    model='Qwen/Qwen2-VL-2B-Instruct',
-)
-
-logging.info('Loading model')
-
-# timestamp0 = vllm.utils.get_timestamp()
-timestamp = int(time.time())
 
 
-# logging.info(timestamp0)
-logging.info(timestamp)
+async def real_load_model():
+
+    model_instance = None
+
+    app = fastapi.FastAPI()
 
 
-# model_instance = vllm.AsyncLLMEngine(engine_args,log_requests=True,start_engine_loop=False)
-model_instance = vllm.AsyncLLMEngine.from_engine_args(engine_args,start_engine_loop=False)
+    @app.post("/generate")
+    async def generate_text():
+        if model_instance is None:
+            return {"message": "Model not loaded"}
+        return {"message": "Hello World"}
+    
+    async def load_model():
+        engine_args = vllm.AsyncEngineArgs(
+            model='Qwen/Qwen2-VL-2B-Instruct',
+        )
+    
+        logging.info('Loading model')
+        logging.info(int(time.time()))
+    
+        model_instance = vllm.AsyncLLMEngine.from_engine_args(engine_args)
+    
+        logging.info('Model loaded')
+        logging.info(int(time.time()))
+    
+        # return model_instance
 
-# (engine_args)
+
+    logging.info("-Child- loading model")
+    asyncio.run(load_model())
+    logging.info("-Child- running api")
+    uvicorn.run(app, host="0.0.0.0", port=6910)
 
 
-logging.info('Model loaded')
-timestamp1 = int(time.time())
-logging.info(timestamp1)
-
-results_generator  = model_instance.generate(
-    'who are u ?',
-    sampling_params=vllm.SamplingParams(
-        max_tokens=100,
-        temperature=0.5,
-        top_k=50,
-        top_p=0.95,
-    ),
-    request_id='test',
-)
+async def real_generate_text():
+    data = {}
+    response = requests.post('http://localhost:6910/generate', json=data)
+    if response.status_code == 200:
+        print('Success!')
+        print('Response:', response.json())
+    else:
+        print('Failed with status code:', response.status_code)
+        print('Error:', response.text)
 
 
-import asyncio
-import time
-import logging
 
-# Assuming model_instance and vllm are already defined above
-async def process_results():
-    try:
-        async for request_output in results_generator:
-            print("Generated output:", request_output.outputs[0].text)
-            print("Request ID:", request_output.request_id)
-    except Exception as e:
-        logging.error(f"Error processing results: {e}")
+# results_generator  = model_instance.generate(
+#     'who are u ?',
+#     sampling_params=vllm.SamplingParams(
+#         max_tokens=100,
+#         temperature=0.5,
+#         top_k=50,
+#         top_p=0.95,
+#     ),
+#     request_id='test',
+# )
 
-async def main():
-    await process_results()
-    timestamp2 = int(time.time())
-    logging.info(timestamp2)
-    logging.info('finished')
 
-# Run the async code
-if __name__ == "__main__":
-    asyncio.run(main())
+# import asyncio
+
+
+# # Assuming model_instance and vllm are already defined above
+# async def process_results():
+#     try:
+#         async for request_output in results_generator:
+#             print("Generated output:", request_output.outputs[0].text)
+#             print("Request ID:", request_output.request_id)
+#     except Exception as e:
+#         logging.error(f"Error processing results: {e}")
+
+# async def main():
+#     await process_results()
+#     timestamp2 = int(time.time())
+#     logging.info(timestamp2)
+#     logging.info('finished')
+
+# # Run the async code
+# if __name__ == "__main__":
+#     asyncio.run(main())
 
 
 
