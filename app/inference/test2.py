@@ -48,7 +48,7 @@ async def main():
         logging.info(timestamp2)
         logging.info('finished')
     finally:
-        await engine.abort()
+        await engine.abort(request_id='test')
         # await engine.shutdown()
 
 if __name__ == "__main__":
