@@ -2,7 +2,10 @@ import fastapi
 import app
 import app.inference
 import app.inference.engines
+import loguru
 
+
+logging = loguru.logger
 router = fastapi.APIRouter()
 
 
@@ -10,6 +13,15 @@ router = fastapi.APIRouter()
 async def ping():
     return {"ping": "pong"}
 
+
+
+async def load_model():
+    try:
+        model = await app.inference.engines.real_load_model()
+        return model
+    except Exception as e:
+        logging.error(f"Error loading model: {e}")
+        raise
 
 
 router.add_api_route(
@@ -22,7 +34,7 @@ router.add_api_route(
 
 router.add_api_route(
     "/load_model",
-    app.inference.engines.real_load_model(),
+    load_model,
     methods=["POST"],
     # response_model=schemas.LoadModelResponse,
     responses={
