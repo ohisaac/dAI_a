@@ -34,6 +34,11 @@ async def real_load_model():
     
         model_instance = vllm.AsyncLLMEngine.from_engine_args(
             engine_args,
+            rope_scaling={
+                "factor": 1.0,
+                'type': 'linear',
+                'rope_type': 'none',
+            },
         )
     
         logging.info('Model loaded')
