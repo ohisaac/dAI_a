@@ -34,16 +34,6 @@ async def real_load_model():
     
         model_instance = vllm.AsyncLLMEngine.from_engine_args(
             engine_args,
-            engine_config=vllm.EngineConfig(
-                max_batch_size=1,
-                max_latency=1000,
-                max_tokens=100,
-                max_requests=1,
-                max_sequence_length=100,
-                max_timeout=1000,
-                max_tokens_per_request=100,
-                max_requests_per_request=1,
-            )
         )
     
         logging.info('Model loaded')

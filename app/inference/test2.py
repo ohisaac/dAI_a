@@ -9,7 +9,7 @@ import loguru
 logging = loguru.logger
 
 # Initialize the engine
-async def init_engine():
+def init_engine():
     engine_args = vllm.AsyncEngineArgs(
         model='Qwen/Qwen2-VL-2B-Instruct',
     )
@@ -61,6 +61,7 @@ async def main():
         # await engine.shutdown()
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    # asyncio.run(main())
+    init_engine()
 
     
