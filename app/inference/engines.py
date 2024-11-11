@@ -27,6 +27,11 @@ async def real_load_model():
     async def load_model():
         engine_args = vllm.AsyncEngineArgs(
             model='Qwen/Qwen2-VL-2B-Instruct',
+            rope_scaling={
+                "factor": 1.0,
+                'type': 'linear',
+                'rope_type': 'none',
+            },
         )
     
         logging.info('Loading model')
@@ -34,11 +39,6 @@ async def real_load_model():
     
         model_instance = vllm.AsyncLLMEngine.from_engine_args(
             engine_args,
-            rope_scaling={
-                "factor": 1.0,
-                'type': 'linear',
-                'rope_type': 'none',
-            },
         )
     
         logging.info('Model loaded')
