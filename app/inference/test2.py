@@ -14,7 +14,7 @@ async def init_engine():
         model='Qwen/Qwen2-VL-2B-Instruct',
     )
     # engine = AsyncLLMEngine.from_pretrained("Qwen/Qwen2-VL-2B-Instruct")
-    engine = vllm.AsyncLLMEngine.from_engine_args(engine_args,start_engine_loop=False)
+    engine = vllm.AsyncLLMEngine.from_engine_args(engine_args, start_engine_loop=True)
 
     return engine
 
